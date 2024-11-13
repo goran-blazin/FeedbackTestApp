@@ -17,6 +17,11 @@ export class CreateFeedbackDto {
 
   @IsNotEmpty()
   @IsString()
+  @Length(3)
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
   @Length(10)
   message: string;
 }

@@ -23,6 +23,7 @@ model Feedback {
   name         String
   email        String       @unique
   feedbackType FeedbackType
+  title        String?
   message      String
   createdAt    DateTime     @default(now())
 }
