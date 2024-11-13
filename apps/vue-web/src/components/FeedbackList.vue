@@ -1,44 +1,17 @@
-<script setup lang="ts">
-import FeedbackWrapper from "./components/FeedbackWrapper.vue";
-import Header from "./components/HeaderWrapper.vue";
-import HeaderWrapper from './components/HeaderWrapper.vue';
-</script>
-
 <template>
-  <div class="h-[100px]">
-  <HeaderWrapper/>
-  </div>
-  <div class="flex h-[calc(100vh-100px)]">
-    <!-- Sidebar -->
-    <div class="w-1/4 bg-white border-r border-gray-200 flex flex-col">
+    <div class="overflow-y-auto flex-grow">
       <!-- Header Section -->
       <div class="px-4 py-4 border-b border-gray-200">
         <div class="flex justify-between items-center">
-          <span class="text-lg font-semibold">Feedback</span>
           <div class="flex space-x-2">
             <button class="text-gray-500">Filter</button>
             <button class="text-gray-500">Sort</button>
           </div>
         </div>
       </div>
-
       <!-- Feedback List -->
-      <div class="overflow-y-auto flex-grow">
+      <div>
         <!-- Individual Feedback Item -->
-        <div class="px-4 py-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer flex items-center">
-          <span class="text-red-500 text-lg mr-2">!</span>
-          <div>
-            <h2 class="text-sm font-medium">Feedback title</h2>
-            <p class="text-xs text-gray-500">Reporter name • 4min ago</p>
-          </div>
-        </div>
-        <div class="px-4 py-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer flex items-center">
-          <span class="text-red-500 text-lg mr-2">!</span>
-          <div>
-            <h2 class="text-sm font-medium">Feedback title</h2>
-            <p class="text-xs text-gray-500">Reporter name • 4min ago</p>
-          </div>
-        </div>
         <div class="px-4 py-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer flex items-center">
           <span class="text-red-500 text-lg mr-2">!</span>
           <div>
@@ -139,86 +112,20 @@ import HeaderWrapper from './components/HeaderWrapper.vue';
         </div>
         <!-- Repeat similar blocks for additional feedback items -->
       </div>
-
-      <!-- Pagination -->
-      <div class="p-4 border-t border-gray-200">
-        <div class="flex justify-between items-center">
-          <button class="text-gray-500 text-sm">&lt; Previous</button>
-          <div class="flex space-x-1">
-            <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
-            <button class="px-2 py-1 text-gray-500">2</button>
-            <button class="px-2 py-1 text-gray-500">3</button>
-            <span class="px-2 py-1 text-gray-500">...</span>
-            <button class="px-2 py-1 text-gray-500">10</button>
-          </div>
-          <button class="text-gray-500 text-sm">Next &gt;</button>
-        </div>
-      </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 bg-white p-8 overflow-auto">
-      <!-- Feedback Detail -->
-      <div class="max-w-3xl mx-auto">
-        <div class="flex items-center space-x-3 mb-4">
-          <span class="text-red-500 text-lg">!</span>
-          <div>
-            <h1 class="text-xl font-semibold">Feedback title</h1>
-            <p class="text-sm text-gray-500">Reporter name (reporter email) • 4min ago</p>
-          </div>
-        </div>
-        <p class="text-gray-700 mb-4">
-          Hi Team,
-          <br><br>
-          I encountered a bug in [software/product name] version [version number]. When I try to save a file, the application crashes. Here’s what happens:
-          <br><br>
-          I was [describe the activity, e.g., “editing a document”] and clicked on save. Instead of saving, the app crashed immediately.
-          <br><br>
-          Here’s how you can reproduce the issue:
-          <br>
-          1. Open [feature or section].<br>
-          2. Make changes.<br>
-          3. Click on the save button.
-          <br><br>
-          I expected it to save my work, but instead, it crashes every time.
-          <br><br>
-          I’m using [operating system] on [basic hardware info]. If relevant, I’m on [browser name and version].
-          <br><br>
-          I’ve attached screenshots and logs that might help.
-          <br><br>
-          Thanks for looking into this!
-          <br><br>
-          Best,
-
-          Hi Team,
-          <br><br>
-          I encountered a bug in [software/product name] version [version number]. When I try to save a file, the application crashes. Here’s what happens:
-          <br><br>
-          I was [describe the activity, e.g., “editing a document”] and clicked on save. Instead of saving, the app crashed immediately.
-          <br><br>
-          Here’s how you can reproduce the issue:
-          <br>
-          1. Open [feature or section].<br>
-          2. Make changes.<br>
-          3. Click on the save button.
-          <br><br>
-          I expected it to save my work, but instead, it crashes every time.
-          <br><br>
-          I’m using [operating system] on [basic hardware info]. If relevant, I’m on [browser name and version].
-          <br><br>
-          I’ve attached screenshots and logs that might help.
-          <br><br>
-          Thanks for looking into this!
-          <br><br>
-          Best,
-        </p>
+    <!-- Pagination -->
+    <div class="flex justify-between items-center p-4 border-t border-gray-200">
+      <button class="text-gray-500 text-sm">&lt; Previous</button>
+      <div class="flex space-x-1">
+        <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2 py-1 text-gray-500">2</button>
+        <button class="px-2 py-1 text-gray-500">3</button>
+        <span class="px-2 py-1 text-gray-500">...</span>
+        <button class="px-2 py-1 text-gray-500">10</button>
       </div>
+      <button class="text-gray-500 text-sm">Next &gt;</button>
     </div>
-
-  </div>
 </template>
-
-<style scoped>
-
-
-</style>
+<script setup lang="ts">
+</script>
