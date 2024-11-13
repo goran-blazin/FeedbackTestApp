@@ -16,19 +16,24 @@ Follow these steps to set up and run the project locally.
    ```bash
    git clone <repository-url> <folder-name>
    cd <folder-name>
-   
+
+   ```
+
 2. **Run npm install script**
 
    ```bash
    npm install
-   
+
+   ```
+
 3. **Run the project in dev mode**
 
    ```bash
    npm run dev
+   ```
 
 Please note that MongoDB is hosted on Atlas and that connection string in .env is hardcoded to this DB.
-If you wish to use your local DB please replace DATABASE_URL in /apps/api/.env with your local MongoDB connection string 
+If you wish to use your local DB please replace DATABASE_URL in /apps/api/.env with your local MongoDB connection string
 
 ### Coding Exercise: Simple Feedback Collection Form
 
