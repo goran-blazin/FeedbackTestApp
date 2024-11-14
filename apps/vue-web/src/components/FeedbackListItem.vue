@@ -3,8 +3,8 @@
     class="px-4 py-3 border-b border-gray-200 cursor-pointer flex items-center space-x-2"
     :class="[
       feedbackStore.selectedFeedbackId === feedback.id
-        ? 'bg-gray-300'
-        : 'hover:bg-gray-200',
+        ? 'bg-slate-300'
+        : 'hover:bg-slate-200',
     ]"
     @click="feedbackStore.setSelectedFeedbackId(feedback.id)"
   >

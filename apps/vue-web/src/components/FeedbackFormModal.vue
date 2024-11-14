@@ -32,11 +32,11 @@
       </div>
 
       <div class="mb-4">
-        <label for="type" class="block text-gray-700 font-medium mb-2"
+        <label for="feedbackType" class="block text-gray-700 font-medium mb-2"
           >Type</label
         >
         <select
-          id="type"
+          id="feedbackType"
           v-model="formData.feedbackType"
           class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring focus:ring-blue-200"
         >

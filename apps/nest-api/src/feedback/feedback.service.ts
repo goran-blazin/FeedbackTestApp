@@ -13,8 +13,22 @@ export class FeedbackService {
     });
   }
 
-  findAll() {
-    return this.prisma.feedback.findMany();
+  findAll({
+    filterByReporter,
+    sortByDate,
+  }: {
+    filterByReporter?: string;
+    sortByDate?: 'ASC' | 'DESC';
+  }) {
+    console.log(filterByReporter, sortByDate);
+    return this.prisma.feedback.findMany({
+      where: {
+        name: filterByReporter,
+      },
+      orderBy: {
+        createdAt: sortByDate === 'DESC' ? 'desc' : 'asc',
+      },
+    });
   }
 
   findOne(id: string) {

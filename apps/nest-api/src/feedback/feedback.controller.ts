@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 // import { UpdateFeedbackDto } from './dto/update-feedback.dto';
@@ -14,8 +22,14 @@ export class FeedbackController {
   }
 
   @Get()
-  findAll() {
-    return this.feedbackService.findAll();
+  findAll(
+    @Query('filterByReporter') filterByReporter: string,
+    @Query('sortByDate') sortByDate: 'ASC' | 'DESC',
+  ) {
+    return this.feedbackService.findAll({
+      filterByReporter,
+      sortByDate,
+    });
   }
 
   @Get(':id')

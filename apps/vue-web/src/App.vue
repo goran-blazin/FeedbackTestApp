@@ -4,7 +4,7 @@
   </div>
   <div class="flex h-[calc(100vh-103px)]">
     <!-- Sidebar -->
-    <div class="w-1/4 bg-gray-50 border-r border-gray-200 flex flex-col">
+    <div class="w-1/4 bg-slate-50 border-r border-gray-200 flex flex-col">
       <FeedbackList />
     </div>
 

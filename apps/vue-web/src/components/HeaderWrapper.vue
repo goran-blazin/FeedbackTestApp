@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between bg-gray-50 p-4 border-b border-gray-200"
+    class="flex items-center justify-between bg-slate-50 p-4 border-b border-gray-200"
   >
     <div class="flex items-center space-x-2">
       <img src="../assets/checkIcon.svg" alt="checkIcon" />

@@ -3,8 +3,21 @@ import { Feedback } from '../types.ts';
 const rootUrl = 'http://localhost:3000';
 
 const FeedbackProvider = {
-  async getAllFeedbacks() {
-    const res = await fetch(`${rootUrl}/api/feedback`);
+  async getAllFeedbacks({
+    filterByReporter,
+    sortByDate,
+  }: {
+    filterByReporter?: string;
+    sortByDate?: 'ASC' | 'DESC';
+  } = {}): Promise<Feedback[]> {
+    const queryParams = new URLSearchParams();
+    if (filterByReporter)
+      queryParams.append('filterByReporter', filterByReporter);
+    if (sortByDate) queryParams.append('sortByDate', sortByDate);
+
+    const res = await fetch(
+      `${rootUrl}/api/feedback${queryParams.toString() ? '?' + queryParams.toString() : ''}`,
+    );
     const jsonData = await res.json();
     return jsonData as Feedback[];
   },

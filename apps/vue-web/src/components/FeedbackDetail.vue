@@ -15,7 +15,10 @@
             </p>
             <h1 class="text-xl font-semibold">{{ selectedFeedback.title }}</h1>
             <p class="text-sm text-gray-500">
-              {{ selectedFeedback.name }} (<a :href="`mailto:${selectedFeedback.email}`">{{ selectedFeedback.email }}</a>)
+              {{ selectedFeedback.name }} (<a
+                :href="`mailto:${selectedFeedback.email}`"
+                >{{ selectedFeedback.email }}</a
+              >)
             </p>
           </div>
           <img
@@ -52,7 +55,9 @@ const queryClient = useQueryClient();
 
 const { data } = useQuery<Feedback[]>({
   queryKey: ['feedback'],
-  queryFn: FeedbackProvider.getAllFeedbacks,
+  queryFn: () => {
+    return FeedbackProvider.getAllFeedbacks();
+  },
 });
 
 const feedbackDeleteMutation = useMutation({

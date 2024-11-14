@@ -15,7 +15,7 @@
       <div class="text-right px-5 pb-5">
         <button
           @click="close"
-          class="bg-gray-200 text-slate-800 px-4 py-2 mr-4 rounded hover:bg-gray-300"
+          class="bg-slate-200 text-slate-800 px-4 py-2 mr-4 rounded hover:bg-slate-300"
         >
           Discard
         </button>
