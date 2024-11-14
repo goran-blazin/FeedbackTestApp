@@ -23,7 +23,7 @@ const FeedbackProvider = {
         'Content-Type': 'application/json',
       },
     });
-    return res.ok;
+    return res.ok || res.json();
   },
 
   async deleteFeedback(id: string) {

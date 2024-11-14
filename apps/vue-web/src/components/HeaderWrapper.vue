@@ -6,10 +6,23 @@
       <img src="../assets/checkIcon.svg" alt="checkIcon" />
     </div>
     <div class="flex-1 mx-4"></div>
-    <GreenButton>New Feedback</GreenButton>
+    <GreenButton @click="() => setCreateModalOpened(true)"
+      >New Feedback</GreenButton
+    >
+    <FeedbackFormModal
+      :is-open="createModalOpened"
+      :close="() => setCreateModalOpened(false)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import GreenButton from './UI/GreenButton.vue';
+import FeedbackFormModal from './FeedbackFormModal.vue';
+import { ref } from 'vue';
+
+const createModalOpened = ref(false);
+const setCreateModalOpened = (open: boolean) => {
+  createModalOpened.value = open;
+};
 </script>

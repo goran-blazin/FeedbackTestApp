@@ -15,31 +15,40 @@
             </p>
             <h1 class="text-xl font-semibold">{{ selectedFeedback.title }}</h1>
             <p class="text-sm text-gray-500">
-              {{ selectedFeedback.name }} ({{ selectedFeedback.email }})
+              {{ selectedFeedback.name }} (<a :href="`mailto:${selectedFeedback.email}`">{{ selectedFeedback.email }}</a>)
             </p>
           </div>
           <img
             class="cursor-pointer"
             alt="SUGGESTION"
             src="../assets/delete.svg"
-            @click="feedbackDeleteMutation.mutate(selectedFeedback.id)"
+            @click="() => setDeleteModal(true)"
           />
         </div>
         <p class="text-gray-700 mb-4">
           {{ selectedFeedback.message }}
         </p>
       </div>
+      <ModalComponent
+        title="Delete Feedback"
+        :is-open="deleteModalOpened"
+        :close="() => setDeleteModal(false)"
+        :submit="() => submitDeleteFeedback(selectedFeedback?.id)"
+      >
+        Are you sure you want to delete this feedback?
+      </ModalComponent>
     </template>
   </div>
 </template>
 <script setup lang="ts">
-import {useQuery, useMutation, useQueryClient} from '@tanstack/vue-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import { Feedback } from '../types.ts';
 import FeedbackProvider from '../providers/FeedbackProvider.ts';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useFeedbackStore } from '../stores/FeedbackStore.ts';
 import { formatDistanceToNow } from 'date-fns';
-const queryClient = useQueryClient()
+import ModalComponent from './UI/ModalComponent.vue';
+const queryClient = useQueryClient();
 
 const { data } = useQuery<Feedback[]>({
   queryKey: ['feedback'],
@@ -51,7 +60,7 @@ const feedbackDeleteMutation = useMutation({
     return FeedbackProvider.deleteFeedback(id);
   },
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['feedback'] })
+    queryClient.invalidateQueries({ queryKey: ['feedback'] });
   },
 });
 
@@ -65,6 +74,19 @@ const selectedFeedback = computed<Feedback | undefined>(() => {
     : undefined;
 });
 
+const deleteModalOpened = ref(false);
+const setDeleteModal = (val: boolean) => {
+  deleteModalOpened.value = val;
+};
+
 const getTimeAgo = (date: string) =>
   formatDistanceToNow(new Date(date), { addSuffix: true });
+
+const submitDeleteFeedback = async (id?: string) => {
+  if (id) {
+    await feedbackDeleteMutation.mutateAsync(id);
+  }
+
+  setDeleteModal(false);
+};
 </script>
