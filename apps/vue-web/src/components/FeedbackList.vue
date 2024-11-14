@@ -68,23 +68,23 @@
     <div class="overflow-y-auto flex-grow" v-else>LOADING...</div>
 
     <div class="p-4 border-t border-gray-200">
-      <div class="flex justify-between items-center">
+      <div class="flex place-content-center items-center">
         <button
-          class="text-gray-500 text-sm"
+          class="px-3 py-1 border text-gray-500 bg-white"
           @click="
             () => pageNumber > 1 && feedbackStore.setPageNumber(pageNumber - 1)
           "
         >
           &lt;
         </button>
-        <div class="flex space-x-1">
+        <div class="flex">
           <template v-for="page in pages" :key="page">
             <button
-              class="px-2 py-1"
+              class="px-3 py-1 border text-gray-700"
               :class="[
                 pageNumber === page
-                  ? 'bg-blue-500 text-white rounded'
-                  : 'text-gray-500',
+                  ? 'bg-green-600 text-white'
+                  : 'text-gray-500 bg-white',
               ]"
               @click="() => feedbackStore.setPageNumber(page)"
             >
@@ -93,7 +93,7 @@
           </template>
         </div>
         <button
-          class="text-gray-500 text-sm"
+          class="px-3 py-1 border text-gray-500 bg-white"
           @click="
             () =>
               pageNumber < pages.length &&
