@@ -13,22 +13,39 @@ export class FeedbackService {
     });
   }
 
-  findAll({
+  async findAll({
     filterByReporter,
     sortByDate,
+    pageNumber,
+    perPage = 5,
   }: {
     filterByReporter?: string;
     sortByDate?: 'ASC' | 'DESC';
+    pageNumber?: number;
+    perPage: number;
   }) {
-    console.log(filterByReporter, sortByDate);
-    return this.prisma.feedback.findMany({
-      where: {
-        name: filterByReporter,
-      },
-      orderBy: {
-        createdAt: sortByDate === 'DESC' ? 'desc' : 'asc',
-      },
-    });
+    const [data, totalCount] = await Promise.all([
+      this.prisma.feedback.findMany({
+        where: {
+          name: filterByReporter,
+        },
+        orderBy: {
+          createdAt: sortByDate === 'DESC' ? 'desc' : 'asc',
+        },
+        take: pageNumber ? perPage : undefined,
+        skip: pageNumber ? perPage * (pageNumber - 1) : undefined,
+      }),
+      this.prisma.feedback.count({
+        where: {
+          name: filterByReporter,
+        },
+      }),
+    ]);
+
+    return {
+      data,
+      totalCount,
+    };
   }
 
   findOne(id: string) {

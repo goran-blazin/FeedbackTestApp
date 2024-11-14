@@ -1,5 +1,5 @@
 <template>
-  <template v-if="allFeedbacks">
+  <template v-if="allFeedbacks?.data">
     <div class="px-4 py-4 border-b border-gray-200">
       <div class="flex justify-between items-center">
         <div class="flex items-center">
@@ -22,9 +22,9 @@
           </select>
         </div>
         <div class="flex space-x-2">
-          <label for="reporter" class="text-gray-500">Sort</label>
+          <label for="sortDate" class="text-gray-500">Sort</label>
           <select
-            id="reporter"
+            id="sortDate"
             class="bg-slate-200 text-gray-500 rounded focus:outline-none focus:ring focus:ring-blue-200 ml-2"
             @change="
               (event) =>
@@ -38,15 +38,30 @@
             :value="sortByDate || ''"
           >
             <option value="">Date</option>
-            <option value="ASC">Asc</option>
-            <option value="DESC">Desc</option>
+            <option value="ASC">Old to New</option>
+            <option value="DESC">New to Old</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-between items-center mt-1">
+        <div>
+          <label for="perPage" class="text-gray-500">View per page</label>
+          <select
+            id="perPage"
+            class="bg-slate-200 text-gray-500 rounded focus:outline-none focus:ring focus:ring-blue-200 ml-2"
+            v-model="perPage"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="20">50</option>
           </select>
         </div>
       </div>
     </div>
 
-    <div class="overflow-y-auto flex-grow" v-if="filteredFeedbacks">
-      <template v-for="feedback in filteredFeedbacks" :key="feedback.id">
+    <div class="overflow-y-auto flex-grow" v-if="filteredFeedbacks?.data">
+      <template v-for="feedback in filteredFeedbacks?.data" :key="feedback.id">
         <FeedbackListItem :feedback="feedback" />
       </template>
     </div>
@@ -54,15 +69,39 @@
 
     <div class="p-4 border-t border-gray-200">
       <div class="flex justify-between items-center">
-        <button class="text-gray-500 text-sm">&lt;</button>
+        <button
+          class="text-gray-500 text-sm"
+          @click="
+            () => pageNumber > 1 && feedbackStore.setPageNumber(pageNumber - 1)
+          "
+        >
+          &lt;
+        </button>
         <div class="flex space-x-1">
-          <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
-          <button class="px-2 py-1 text-gray-500">2</button>
-          <button class="px-2 py-1 text-gray-500">3</button>
-          <span class="px-2 py-1 text-gray-500">...</span>
-          <button class="px-2 py-1 text-gray-500">10</button>
+          <template v-for="page in pages" :key="page">
+            <button
+              class="px-2 py-1"
+              :class="[
+                pageNumber === page
+                  ? 'bg-blue-500 text-white rounded'
+                  : 'text-gray-500',
+              ]"
+              @click="() => feedbackStore.setPageNumber(page)"
+            >
+              {{ page }}
+            </button>
+          </template>
         </div>
-        <button class="text-gray-500 text-sm">&gt;</button>
+        <button
+          class="text-gray-500 text-sm"
+          @click="
+            () =>
+              pageNumber < pages.length &&
+              feedbackStore.setPageNumber(pageNumber + 1)
+          "
+        >
+          &gt;
+        </button>
       </div>
     </div>
   </template>
@@ -72,29 +111,32 @@
 </template>
 <script setup lang="ts">
 import FeedbackListItem from './FeedbackListItem.vue';
-import { Feedback } from '../types.ts';
 
 import { useQuery } from '@tanstack/vue-query';
 import FeedbackProvider from '../providers/FeedbackProvider.ts';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useFeedbackStore } from '../stores/FeedbackStore.ts';
 import _ from 'lodash';
 import { storeToRefs } from 'pinia';
 
 const feedbackStore = useFeedbackStore();
-const { filterByReporter, sortByDate } = storeToRefs(feedbackStore);
+const { filterByReporter, sortByDate, pageNumber } = storeToRefs(feedbackStore);
 
-const { data: filteredFeedbacks } = useQuery<Feedback[]>({
-  queryKey: ['feedback', filterByReporter, sortByDate],
+const perPage = ref(5);
+
+const { data: filteredFeedbacks } = useQuery({
+  queryKey: ['feedback', filterByReporter, sortByDate, pageNumber, perPage],
   queryFn: () => {
     return FeedbackProvider.getAllFeedbacks({
       filterByReporter: filterByReporter?.value,
       sortByDate: sortByDate?.value,
+      pageNumber: pageNumber?.value,
+      perPage: perPage.value,
     });
   },
 });
 
-const { data: allFeedbacks } = useQuery<Feedback[]>({
+const { data: allFeedbacks } = useQuery({
   queryKey: ['feedback'],
   queryFn: () => {
     return FeedbackProvider.getAllFeedbacks();
@@ -102,8 +144,19 @@ const { data: allFeedbacks } = useQuery<Feedback[]>({
 });
 
 const reporters = computed(() => {
-  if (Array.isArray(allFeedbacks.value)) {
-    return _.uniq(allFeedbacks.value.map((feedback) => feedback.name));
+  if (Array.isArray(allFeedbacks.value?.data)) {
+    return _.uniq(allFeedbacks.value.data.map((feedback) => feedback.name));
+  } else {
+    return [];
+  }
+});
+
+const pages = computed(() => {
+  if (filteredFeedbacks.value?.totalCount) {
+    const totalPages = Math.ceil(
+      filteredFeedbacks.value.totalCount / perPage.value,
+    ); // Calculate total pages needed
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
   } else {
     return [];
   }
@@ -111,11 +164,10 @@ const reporters = computed(() => {
 
 watch(filteredFeedbacks, () => {
   if (
-    Array.isArray(filteredFeedbacks.value) &&
-    filteredFeedbacks.value.length > 0 &&
-    !feedbackStore.selectedFeedbackId
+    Array.isArray(filteredFeedbacks.value?.data) &&
+    filteredFeedbacks.value?.data.length > 0
   ) {
-    feedbackStore.setSelectedFeedbackId(filteredFeedbacks.value[0].id);
+    feedbackStore.setSelectedFeedbackId(filteredFeedbacks.value?.data[0].id);
   }
 });
 </script>

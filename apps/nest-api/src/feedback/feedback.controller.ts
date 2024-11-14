@@ -25,10 +25,14 @@ export class FeedbackController {
   findAll(
     @Query('filterByReporter') filterByReporter: string,
     @Query('sortByDate') sortByDate: 'ASC' | 'DESC',
+    @Query('pageNumber') pageNumber: string,
+    @Query('perPage') perPage: string,
   ) {
     return this.feedbackService.findAll({
       filterByReporter,
       sortByDate,
+      pageNumber: +pageNumber,
+      perPage: perPage ? +perPage : undefined,
     });
   }
 

@@ -5,6 +5,7 @@ type FeedbackState = {
   selectedFeedbackId: string | undefined;
   filterByReporter?: string;
   sortByDate?: 'ASC' | 'DESC';
+  pageNumber: number;
 };
 
 export const useFeedbackStore = defineStore('feedback', {
@@ -12,6 +13,7 @@ export const useFeedbackStore = defineStore('feedback', {
     selectedFeedbackId: undefined,
     filterByReporter: undefined,
     sortByDate: undefined,
+    pageNumber: 1,
   }),
 
   actions: {
@@ -24,15 +26,13 @@ export const useFeedbackStore = defineStore('feedback', {
       } else {
         this.filterByReporter = undefined;
       }
+      this.pageNumber = 1;
     },
     setSortByDate(sort: 'ASC' | 'DESC' | undefined) {
       this.sortByDate = sort;
     },
-    // addFeedback(feedback: Feedback) {
-    //     this.feedbackList.push(feedback)
-    // },
-    // setFeedbackList(feedbacks: Feedback[]) {
-    //     this.feedbackList = feedbacks
-    // }
+    setPageNumber(pageNumber: number) {
+      this.pageNumber = pageNumber;
+    },
   },
 });

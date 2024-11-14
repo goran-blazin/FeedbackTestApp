@@ -53,7 +53,7 @@ import { formatDistanceToNow } from 'date-fns';
 import ModalComponent from './UI/ModalComponent.vue';
 const queryClient = useQueryClient();
 
-const { data } = useQuery<Feedback[]>({
+const { data } = useQuery({
   queryKey: ['feedback'],
   queryFn: () => {
     return FeedbackProvider.getAllFeedbacks();
@@ -72,8 +72,8 @@ const feedbackDeleteMutation = useMutation({
 const feedbackStore = useFeedbackStore();
 
 const selectedFeedback = computed<Feedback | undefined>(() => {
-  return data.value
-    ? data.value.find(
+  return data.value?.data
+    ? data.value.data.find(
         (feedback) => feedback.id === feedbackStore.selectedFeedbackId,
       )
     : undefined;

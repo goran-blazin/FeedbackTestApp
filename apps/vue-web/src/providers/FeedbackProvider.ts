@@ -6,20 +6,29 @@ const FeedbackProvider = {
   async getAllFeedbacks({
     filterByReporter,
     sortByDate,
+    pageNumber,
+    perPage,
   }: {
     filterByReporter?: string;
     sortByDate?: 'ASC' | 'DESC';
-  } = {}): Promise<Feedback[]> {
+    pageNumber?: number;
+    perPage?: number;
+  } = {}): Promise<{
+    data: Feedback[];
+    totalCount: 1;
+  }> {
     const queryParams = new URLSearchParams();
     if (filterByReporter)
       queryParams.append('filterByReporter', filterByReporter);
     if (sortByDate) queryParams.append('sortByDate', sortByDate);
+    if (pageNumber) queryParams.append('pageNumber', pageNumber.toString());
+    if (perPage) queryParams.append('perPage', perPage.toString());
 
     const res = await fetch(
       `${rootUrl}/api/feedback${queryParams.toString() ? '?' + queryParams.toString() : ''}`,
     );
     const jsonData = await res.json();
-    return jsonData as Feedback[];
+    return jsonData;
   },
 
   async getSingleFeedback(id: string) {
